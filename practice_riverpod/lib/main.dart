@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:practice_riverpod/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:practice_riverpod/providers/theme_provider.dart';
+import 'package:practice_riverpod/theme_screen.dart';
 
 void main(){
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = ref.watch(themeModeProvider);
     return MaterialApp(
-      home: HomeView(),
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home:const ThemeScreen(),
     );
   }
 }
