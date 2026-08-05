@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice_riverpod/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:practice_riverpod/providers/stream_provider.dart';
 import 'package:practice_riverpod/providers/theme_provider.dart';
 import 'package:practice_riverpod/theme_screen.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends ConsumerWidget {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home:const ThemeScreen(),
+      home:const TimerScreen(),
     );
   }
 }

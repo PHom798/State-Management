@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'theme_provider.g.dart';
 
+//class based provider
 @riverpod
 class ThemeModeNotifier extends _$ThemeModeNotifier {
 //1.Define the initial state
