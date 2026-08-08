@@ -20,6 +20,29 @@ class _TodoAddDialogState extends State<TodoAddDialog> {
         children: [
           //title
           Text('New Todo',style: textTheme.titleLarge,),
+          const SizedBox(height:20),
+          TextField(
+            controller: textController,
+            decoration: InputDecoration(hintText: 'Enter new task'),
+
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(onPressed: (){
+                Navigator.of(context).pop;
+
+              }, child: Text("Close")),
+
+              ElevatedButton(onPressed: (){
+                final title = textController.text;
+                if(title.isEmpty){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please enter a title")));
+                }
+              }, child:Text("Add")),
+
+            ],
+          )
         ],
       ),),
     );
