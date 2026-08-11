@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:task1_nextgenatix/core/app_theme.dart';
 import 'package:task1_nextgenatix/screens/splash_screen.dart';
 
 Future<void> _hideSystemNavBar() {
@@ -63,6 +64,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.themeData,
       home: const SplashScreen(),
     );
   }

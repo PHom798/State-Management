@@ -1,121 +1,152 @@
 import 'package:flutter/material.dart';
-import 'dart:ui'; // needed for ImageFilter
+import 'package:task1_nextgenatix/core/app_colors.dart';
 
-class SplashScreen extends StatelessWidget {
+import 'login_screen.dart';
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final screenHeight = constraints.maxHeight;
-
-          return Stack(
-            children: [
-              Image.asset('assets/img_1.png'),
-
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18.0,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.landscape_outlined, color: Color(0xFFffead3)),
-                      SizedBox(width: 8),
-                      Text(
-                        'TravelMate',
-                        style: TextStyle(
-                          color: Color(0xFFffead3),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'PlayfairDisplay',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: screenHeight * 0.46,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: LoginCard(),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class LoginCard extends StatelessWidget {
-  const LoginCard({super.key});
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  //animation controllers
+  late AnimationController _controller;
+  late Animation<double> _logoOpacity;
+  late Animation<double> _logoScale;
+
+  late Animation<double> _textOpacity;
+  late Animation<Offset> _textSlide;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+
+    _logoOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+
+    _logoScale = Tween<double>(begin: 0.8, end: 1).animate(_controller);
+
+    final curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+
+    final textAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.25, 1, curve: Curves.easeOut),
+    );
+
+    _textOpacity = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    _textSlide = Tween<Offset>(
+      begin: const Offset(0, 0.15),
+      end: Offset.zero,
+    ).animate(curvedAnimation);
+
+    _controller.forward();
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500),
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return const LoginScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 26, sigmaY: 26),
-        child: Container(
-          decoration: BoxDecoration(
-            // Himalayan mist / frosted stone
-            color: Color(0xFFffead3).withValues(alpha: 0.9),
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-
-            // Thin snow-like highlight
-            border: Border(
-              top: BorderSide(
-                color: Colors.white.withValues(alpha: 0.55),
-                width: 1,
+    return Scaffold(
+      //backgroundColor: Color(0xFF5B5FEF),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(flex: 2),
+            ScaleTransition(
+              scale: _logoScale,
+              child: FadeTransition(
+                opacity: _logoOpacity,
+                child: Container(
+                  height: 72,
+                  width: 72,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.primary,
+                  ),
+                  child: Icon(
+                    Icons.task_alt,
+                    size: 40,
+                    color: AppColors.background,
+                  ),
+                ),
               ),
             ),
 
-            // Deep mountain shadow
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF111820).withValues(alpha: 0.28),
-                offset: const Offset(0, -12),
-                blurRadius: 35,
-                spreadRadius: -8,
-              ),
-            ],
-          ),
+            const SizedBox(height: 20),
 
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 26, 24, 26),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome back, traveler',
+            FadeTransition(
+              opacity: _textOpacity,
+              child: SlideTransition(
+                position: _textSlide,
+                child: Text(
+                  "TaskFlow",
                   style: TextStyle(
+                    color: colors.primary,
+                    fontSize: 30,
                     fontFamily: 'Fraunces',
-                    fontSize: 23,
-                    color: const Color(0xFF29241F),
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
-                const Text(
-                  'फेरि स्वागत छ, यात्री',
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            FadeTransition(
+              opacity: _textOpacity,
+              child: SlideTransition(
+                position: _textSlide,
+                child: Text(
+                  "Get things done\nsimply",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFFB5622A),
-                    fontSize: 14,
-                    fontFamily: 'nepali',
+                    color: AppColors.text,
+                    fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+            const Spacer(flex: 3),
+
+            CircularProgressIndicator(),
+            const Spacer(flex: 1),
+          ],
         ),
       ),
     );
