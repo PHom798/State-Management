@@ -57,9 +57,9 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500),
+            transitionDuration: const Duration(milliseconds: 800),
             pageBuilder: (context, animation, secondaryAnimation) {
-              return const LoginScreen();
+              return  LoginScreen();
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
