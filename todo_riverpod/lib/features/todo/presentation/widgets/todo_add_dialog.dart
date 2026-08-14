@@ -30,7 +30,7 @@ class _TodoAddDialogState extends State<TodoAddDialog> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(onPressed: (){
-                Navigator.of(context).pop;
+                Navigator.of(context).pop();
 
               }, child: Text("Close")),
 

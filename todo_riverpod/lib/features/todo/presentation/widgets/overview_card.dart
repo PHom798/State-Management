@@ -15,7 +15,7 @@ class OverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: theme.cardColor,
+    color: theme.cardColor,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
